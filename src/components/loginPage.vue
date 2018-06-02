@@ -1,18 +1,21 @@
 <template>
   <div class="hello">
 
-    <form action="" id="form">
+    <form action="" id="form" @submit.prevent="validation">
 
      <label for="">
-        <input type="text" placeholder="Username">
+        <input type="text" v-model="email" placeholder="Username/Email">
+  
      </label>
+      <p>{{emailError}}</p>
+     <label for=""> 
+        <input :type="passtype" v-model="password" placeholder="Password"> 
 
-     <label for="">
-        <input type="text" placeholder="Password">
+        <a href="#" @click="showPass()"> <img src="../assets/eye-open.png" alt=""></a>
      </label>
+    <p>{{passError}} </p>
 
-
-  <button>Login</button>
+  <button type="submit">Login</button>
     </form>
 
   </div>
@@ -21,6 +24,47 @@
 <script>
 export default {
   name: 'loginPage',
+  data(){
+
+    return{
+      passtype:"password",
+      password:"",
+      email:"",
+      emailError:"",
+      passError:""
+    }
+  },
+  methods:{
+    showPass(){
+      if(this.passtype=="password"){
+        this.passtype = "text"
+      } else{
+        this.passtype="password"
+      }
+    },
+    regEx(){
+      var regularExpresion = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+       return regularExpresion.test(this.email);   
+    },
+    validation(){
+   
+      // console.log("im here",this.password, this.email);
+      if(!this.regEx(this.email) ){
+      this.emailError = "E-mail doesn't exist."
+      } else if(this.email == ""){
+      this.emailError = "E-mail is required."
+      }
+       if(this.password == ""){
+        this.passError = "Password is required."
+        // console.log(this.password)
+      } else if (this.password.length < 3){
+        this.passError = "Password needs to be at least 3 characters long."
+        console.log(this.password)
+        
+      }
+
+    }
+  }
 
 }
 </script>
@@ -33,19 +77,26 @@ export default {
   width:50%;
   justify-content: center;
   flex-direction: column;
+  
   input{
     background-color: rgba($color: #ffffff, $alpha: 0.1);
     padding:10px;
     width:30%;
     margin:5px;
     border:3px solid   rgba($color: #ffffff, $alpha: 0.8);
-    border-radius: 10px;
+    border-radius: 50px;
     cursor: pointer;
+
+  }
+  img{
+    height:15px;
   }
   ::placeholder{
     color:#222222;
     font-weight: bolder;
-  }
+      }
+    
+  
   button{
     width:100px;
     margin:0 auto;
